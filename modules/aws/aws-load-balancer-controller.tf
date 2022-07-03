@@ -13,7 +13,8 @@ locals {
       iam_policy_override       = null
       default_network_policy    = true
       allowed_cidrs             = ["0.0.0.0/0"]
-      name_prefix               = "${var.cluster-name}-awslbc"
+      name_prefix               = "${var.cluster-name}-awslbc",
+      image_repository          = "602401143452.dkr.ecr.us-west-2.amazonaws.com/amazon/aws-load-balancer-controller"
     },
     var.aws-load-balancer-controller
   )
@@ -21,6 +22,8 @@ locals {
   values_aws-load-balancer-controller = <<VALUES
 clusterName: ${var.cluster-name}
 region: ${data.aws_region.current.name}
+image:
+  repository: "${local.aws-load-balancer-controller["image_repository"]}"
 serviceAccount:
   name: "${local.aws-load-balancer-controller["service_account_name"]}"
   annotations:
